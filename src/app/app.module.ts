@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app.routing.module';
 
 import { AppComponent } from './app.component';
 import { IndexComponent } from './index/index.component';
+import { IndexService } from './services/index.service';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import { IndexComponent } from './index/index.component';
     HttpClientModule
   ],
   providers: [
-    // Services
+    IndexService
   ],
   bootstrap: [AppComponent]
 })
