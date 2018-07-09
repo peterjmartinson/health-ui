@@ -12,6 +12,6 @@ export class IndexComponent implements OnInit   {
     constructor(private router: Router)   { }
 
     ngOnInit()   {
-        this.display = 'testing index component module';
+        this.display = 'testing index component';
     }
 }
