@@ -1,18 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { GreetingsModel } from '../models/app.types';
-import { IndexService } from '../services/index.service';
-
 @Component({
-    templateUrl: 'index.component.html'
+  selector: 'app-nav-header',
+  templateUrl: './nav.component.html'
 })
-export class IndexComponent implements OnInit   {
+export class NavComponent {
 
     constructor(private router: Router)   { }
-
-    ngOnInit()   {
-    }
 
     home(): void  {
         this.router.navigate(['/index']);
@@ -20,5 +15,9 @@ export class IndexComponent implements OnInit   {
 
     newPatient(): void  {
         this.router.navigate(['/patient']);
+    }
+
+    newPatientStatistics(): void  {
+        this.router.navigate(['/statistics']);
     }
 }

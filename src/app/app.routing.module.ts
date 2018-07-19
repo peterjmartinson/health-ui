@@ -2,11 +2,15 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IndexComponent } from './index/index.component';
+import { PatientComponent } from './patient/patient.component';
+import { PatientStatisticsComponent } from './patient/patient.statistics.component';
 
 const routes: Routes = [
-  { path: '', component: IndexComponent },
-  // Add routing modules here
-  { path: '**', redirectTo: '', pathMatch: 'full' }
+  { path: 'index', component: IndexComponent },
+  { path: 'patient', component: PatientComponent },
+  { path: 'statistics', component: PatientStatisticsComponent },
+  { path: '', redirectTo: '/index', pathMatch: 'full' },
+  { path: '**', component: IndexComponent }
 ];
 
 @NgModule({

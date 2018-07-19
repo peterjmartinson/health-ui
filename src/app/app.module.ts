@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app.routing.module';
@@ -8,20 +7,29 @@ import { AppRoutingModule } from './app.routing.module';
 import { AppComponent } from './app.component';
 import { IndexComponent } from './index/index.component';
 import { IndexService } from './services/index.service';
+import { PatientComponent } from './patient/patient.component';
+import { NavComponent } from './navigation/nav.component';
+import { PatientStatisticsComponent } from './patient/patient.statistics.component';
+import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
     AppComponent,
-    IndexComponent
+    IndexComponent,
+    PatientComponent,
+    PatientStatisticsComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule
+    [ModalModule.forRoot()]
   ],
   providers: [
-    IndexService
+    IndexService,
+    BsModalRef,
+    BsModalService
   ],
   bootstrap: [AppComponent]
 })
