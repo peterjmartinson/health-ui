@@ -14,6 +14,10 @@ export class PatientService  {
         this.currentPatient = patient;
     }
 
+    getCurrentPatient(): PatientModel  {
+        return this.currentPatient;
+    }
+
     getAllPatients(): Observable<PatientModel[]> {
         return this.http.get<PatientModel[]>(`${this.patientUrl}/getAll`);
     }

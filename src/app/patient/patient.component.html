@@ -1,17 +1,14 @@
- <div bsModal class="modal fade" #staticModal="bs-modal"
-     tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 id="dialog-static-name" class="modal-title pull-left">Static modal</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="staticModal.hide()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        This is static modal, backdrop click will not close it.
-        Click <b>&times;</b> to close modal.
-      </div>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <div class = "navbar-header">
+        <a class = "navbar-brand">Welcome, {{patient.firstName}}</a>
+        </div>
     </div>
-  </div>
-</div>
+    <div class="container-fluid">
+        <ul class="nav navbar-nav">
+            <li><a (click)="viewPatientHistory()">Patient History</a></li>
+            <li><a (click)="newSession()">New Session</a></li>
+            <li><a (click)="logOut()">Log out</a></li>
+        </ul>
+    </div>
+</nav>

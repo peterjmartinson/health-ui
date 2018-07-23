@@ -1,86 +1,58 @@
-{% comment %} <div class="row">
-  <div class="col-md-3 col-sm-2"></div>
-  <div class="col-md-6 col-sm-8 col-xs-12">
-    <div class="login-screen">
-      <p class="text-center">
-        {{ title }}
-      </p>
-      <div class="alert alert-danger" *ngIf="patientExists">
-        <p>
-          {{ invalidLoginMessage }} 
-        </p>
-      <div class="form-group">
-        <label class="control-label" for="patientId">Patient ID:</label>
-        <input type="text" class="form-control" id="patientId" [(ngModel)]="patientId">
-      </div>
-      <div style="text-align:left;">
-        <button class="btn btn-primary" [disabled]="!patientId" (click)="logIn()">Log In &gt;&gt;</button>
-        <!-- open modal window -->
-        <button type="button" class="btn btn-primary" (click)="openModal()">Register</button>
-        <div class="backdrop" [ngStyle]="{'display': display}"></div>
-        <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display': display}">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" aria-label="Close" (click)="onCloseHandled()">
-                  <span aria-hidden="true">
-                    &times;
-                  </span>
-                </button>
-                <h4 class="modal-title">New Patient Registration</h4>
-              </div>
-              <div class="modal-body">
-                <div class="form-group">
-                  <label class="control-label" for="firstName">First Name:</label>
-                  <input type="text" class="form-control" id="firstName" [(ngModel)]="firstName">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+<div class="inner-wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4 col-sm-offset-4">
+        <h2 class="text-center">Patient Log In</h2>
+        <form role="form">
+          <div class="form-group">
+            <label class="control-label" for="patientId">Patient ID</label>
+            <input type="text" class="form-control" id="patientId" required pattern="[0-9]+"
+              [(ngModel)]="patientId" name="patientId" placeholder="Enter Patient ID Number">
+          </div>
+          <button type="button" class="btn btn-default" (click)="logIn()">Log In</button>
+          <button type="button" class="btn btn-default" (click)="staticModal.show()" data-target="#bs-modal">Register</button>
+          <div class="modal fade" bsModal #staticModal="bs-modal" [config]="{backdrop: 'static'}"
+              tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 id="dialog-static-name" class="modal-title pull-left">New Patient Registration</h4>
+                  <button type="button" class="close pull-right" aria-label="Close" (click)="staticModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
                 </div>
-                <div class="form-group">
-                  <label class="control-label" for="lastName">Last Name:</label>
-                  <input type="text" class="form-control" id="lastName" [(ngModel)]="lastName">
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label class="control-label" for="firstName">First Name</label>
+                    <input type="text" id="firstName" class="form-control" name="firstName" [(ngModel)]="firstName">
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label" for="lastName">Last Name</label>
+                    <input type="text" id="lastName" class="form-control" name="lastName" [(ngModel)]="lastName">
+                  </div>
+                  <div class="radio">
+                    <label class="radio-inline"><input type="radio" name="gender" value="Male" (click)="setGender('Male')" [checked]='true' ngModel>Male</label>
+                    <label class="radio-inline"><input type="radio" name="gender" value="Female" (click)="setGender('Female')" [checked]='true' ngModel>Female</label>
+                    <label class="radio-inline"><input type="radio" name="gender" value="Other" (click)="setGender('Other')" [checked]='true' ngModel>Other</label>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label" for="dateOfBirth">Date of Birth</label>
+                      <div class="controls">
+                        <input type="date" name="dateOfBirth" [(ngModel)]="dateOfBirth" class="input-xlarge" [ngModelOptions]="{standalone: true}" />
+                      </div>
+                  </div>
                 </div>
-                <div class="form-check-inline">
-                  <label class="form-check-label">
-                    <input type="radio" class="form-check-label" name="optradio" [(ngModel)]="gender">Male
-                  </label>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" [disabled]="!(firstName && lastName && gender && dateOfBirth)" (click)="registerNewPatient()">Register</button>
                 </div>
-                <div class="form-check-inline">
-                  <label class="form-check-label">
-                    <input type="radio" class="form-check-label" name="optradio" [(ngModel)]="gender">Female
-                  </label>
-                </div>
-                <div class="form-check-inline">
-                  <label class="form-check-label">
-                    <input type="radio" class="form-check-label" name="optradio" [(ngModel)]="gender">Other
-                  </label>
-                </div>
-                <div class="form-group">
-                  <label class="control-label" for="dateOfBirth">Date of Birth</label>
-                    <div class="controls">
-                      <input type="date" [(ngModel)]="dateOfBirth" class="input-xlarge" [ngModelOptions]="{standalone: true}" name="dateOfBirth" />
-                    </div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" (click)="onCloseHandled()">Close</button>
-                <button type="button" class="btn btn-default" (click)="registerNewPatient()">Register</button>
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
-</div> {% endcomment %}
-
-   <section class="loginform cf">  
-<form name="login" action="index_submit" method="get" accept-charset="utf-8">  
-    <ul>  
-        <li><label for="usermail">Email</label>  
-        <input type="email" name="usermail" placeholder="yourname@email.com" required></li>  
-        <li><label for="password">Password</label>  
-        <input type="password" name="password" placeholder="password" required></li>  
-        <li>  
-        <input type="submit" value="Login"></li>  
-    </ul>  
-</form>  
-</section>
+</div>

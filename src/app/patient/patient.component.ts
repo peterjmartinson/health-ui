@@ -1,20 +1,51 @@
 import { Router } from '@angular/router';
-import { Component, TemplateRef, OnInit, ViewChild } from '@angular/core';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { Component, OnInit } from '@angular/core';
+import { PatientService } from '../services/patient.service';
+import { PatientHistoryService } from '../services/patient.history.service';
+import { PatientModel, PatientHistoryModel, UWDataModel } from '../models/app.types';
 
 @Component({
-    selector: 'app-patient-form-modal',
+    selector: 'app-patient-form',
     templateUrl: 'patient.component.html'
 })
 export class PatientComponent implements OnInit  {
 
-  @ViewChild('staticModal') patientModal: any;
+  constructor(private router: Router, private patientService: PatientService, private patientHistoryService: PatientHistoryService) { }
 
-  constructor(private router: Router) { }
+  patient: PatientModel;
+  patientHistoryList: PatientHistoryModel[];
+  data: UWDataModel;
+  comments: string;
 
   ngOnInit()  {
-    console.log('Initialization of Modal');
-    console.log(this.patientModal);
-    this.patientModal.show();
+    this.patient = this.patientService.getCurrentPatient();
+    this.viewPatientHistory();
+  }
+
+  viewPatientHistory(): void  {
+    this.patientHistoryService.getPatientHistoryById(this.patient.id)
+      .subscribe(patientHistoryList => {
+        this.patientHistoryList = patientHistoryList;
+      });
+  }
+
+  newSession(): void  {
+    this.patientHistoryService.createNewSession(
+      this.patient.id,
+      {
+        'id': this.patient.id,
+        'patient': this.patient,
+        'data': this.data,
+        'measurementTimestamp': null,
+        'predictedDiagnosis': null,
+        'comments': this.comments
+      }).subscribe(newPatientHistory => {
+        this.patientHistoryList.push(newPatientHistory);
+      });
+  }
+
+  logOut(): void  {
+    this.patientService.setCurrentPatient(null);
+    this.router.navigate(['/login']);
   }
 }

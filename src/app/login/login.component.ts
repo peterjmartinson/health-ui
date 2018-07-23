@@ -5,7 +5,8 @@ import { PatientModel } from '../models/app.types';
 import { PatientService } from '../services/patient.service';
 
 @Component({
-    templateUrl: 'login.component.html'
+    templateUrl: 'login.component.html',
+    styles: ['login.component.css']
 })
 export class LoginComponent implements OnInit  {
 
@@ -16,8 +17,8 @@ export class LoginComponent implements OnInit  {
     patientId: number;
     firstName: string;
     lastName: string;
-    dateOfBirth: Date;
     gender: string;
+    dateOfBirth: Date;
 
     constructor(private router: Router, private patientService: PatientService)   { }
 
@@ -26,6 +27,8 @@ export class LoginComponent implements OnInit  {
     }
 
     logIn(): void  {
+        console.log('Hit login button');
+        console.log('Patient ID: ' + this.patientId);
         this.patientService.getPatientById(this.patientId)
             .subscribe(
                 existingPatient => {
@@ -51,17 +54,12 @@ export class LoginComponent implements OnInit  {
         this.display = 'block';
     }
 
+    setGender(gender: string)  {
+        this.gender = gender;
+    }
+
     registerNewPatient(): void  {
         console.log('Registering new user...');
-        const patientModel = {
-            'id': null,
-            'firstName': this.firstName,
-            'lastName': this.lastName,
-            'gender': this.gender,
-            'dateOfBirth': this.dateOfBirth,
-            'patientCreationTimestamp': null
-        };
-
         this.patientService.createNewPatient(
             {
                 'id': null,
@@ -74,7 +72,8 @@ export class LoginComponent implements OnInit  {
             ).subscribe(createdUser =>  {
                 this.patientExists = false;
                 this.invalidLoginMessage = null;
-                this.onCloseHandled();
+                this.patientService.setCurrentPatient(createdUser);
+                this.router.navigate(['/patient']);
             });
     }
 
