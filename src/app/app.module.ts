@@ -5,31 +5,34 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app.routing.module';
 
 import { AppComponent } from './app.component';
-import { IndexComponent } from './index/index.component';
-import { IndexService } from './services/index.service';
 import { PatientComponent } from './patient/patient.component';
 import { NavComponent } from './navigation/nav.component';
-import { PatientStatisticsComponent } from './patient/patient.statistics.component';
 import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
+import { PatientService } from './services/patient.service';
+import { PatientHistoryService } from './services/patient.history.service';
+import { LoginComponent } from './login/login.component';
+import { HttpClient } from 'selenium-webdriver/http';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
-    IndexComponent,
+    LoginComponent,
     PatientComponent,
-    PatientStatisticsComponent,
     NavComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
+    HttpClientModule,
     [ModalModule.forRoot()]
   ],
   providers: [
-    IndexService,
+    PatientService,
+    PatientHistoryService,
     BsModalRef,
-    BsModalService
+    BsModalService,
   ],
   bootstrap: [AppComponent]
 })

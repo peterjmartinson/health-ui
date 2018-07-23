@@ -10,14 +10,10 @@ export class NavComponent {
     constructor(private router: Router)   { }
 
     home(): void  {
-        this.router.navigate(['/index']);
+        this.router.navigate(['/login']);
     }
 
-    newPatient(): void  {
+    patient(): void  {
         this.router.navigate(['/patient']);
-    }
-
-    newPatientStatistics(): void  {
-        this.router.navigate(['/statistics']);
     }
 }
