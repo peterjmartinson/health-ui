@@ -6,7 +6,6 @@ import { AppRoutingModule } from './app.routing.module';
 
 import { AppComponent } from './app.component';
 import { PatientComponent } from './patient/patient.component';
-import { NavComponent } from './navigation/nav.component';
 import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { PatientService } from './services/patient.service';
 import { PatientHistoryService } from './services/patient.history.service';
@@ -18,8 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
   declarations: [
     AppComponent,
     LoginComponent,
-    PatientComponent,
-    NavComponent
+    PatientComponent
   ],
   imports: [
     BrowserModule,

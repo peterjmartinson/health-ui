@@ -76,9 +76,4 @@ export class LoginComponent implements OnInit  {
                 this.router.navigate(['/patient']);
             });
     }
-
-    onCloseHandled(): void  {
-        this.display = 'none';
-        console.log('CLOSED');
-    }
 }
