@@ -5,15 +5,34 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-4 col-sm-offset-4">
-        <h2 class="text-center">Patient Log In</h2>
         <form role="form">
-          <div class="form-group">
-            <label class="control-label" for="patientId">Patient ID</label>
+          <h2 class="text-center">Patient Selection</h2>
+          
+          <label class="control-label" for="patientId">Patient Name</label>
+          <div class="form-inline">
+            <select class="form-control" id="patientId" [(ngModel)]="patientId" name="patientId" required style="width: 300px">
+              <option *ngFor="let patient of allPatients" value={{patient.id}}>
+                {{patient.lastName}}, {{patient.firstName}}
+              </option>
+            </select>
+            <input type="checkbox" title="Toggle to manually enter Patient ID" [checked]="searchManualId" (change)="searchManualId = !searchManualId" />
+          </div>
+
+          <div class="form-group" [hidden]="!searchManualId">
+            <label class="control-label" for="patientId">Input Patient ID</label>
             <input type="text" class="form-control" id="patientId" required pattern="[0-9]+"
               [(ngModel)]="patientId" name="patientId" placeholder="Enter Patient ID Number">
           </div>
+          <hr />
           <button type="button" class="btn btn-default" (click)="logIn()">Log In</button>
           <button type="button" class="btn btn-default" (click)="staticModal.show()" data-target="#bs-modal">Register</button>
+            <div class="alert alert-danger"
+                *ngIf="loginMessage !== null">
+              <p>
+                {{loginMessage}}
+              </p>
+            </div>
+
           <div class="modal fade" bsModal #staticModal="bs-modal" [config]="{backdrop: 'static'}"
               tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
             <div class="modal-dialog modal-sm">

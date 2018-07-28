@@ -34,7 +34,7 @@ export class PatientService  {
         return this.http.delete<string>(`${this.patientUrl}/delete?patientId=${patientId}`);
     }
 
-    updatePatientById(patientId: number, request: PatientModel): Observable<PatientModel>  {
-        return this.http.put<PatientModel>(`${this.patientUrl}/update?patientId=${patientId}`, request);
+    updatePatientByIdFinalDiagnosis(patientId: number, finalDiagnosis: string): Observable<PatientModel>  {
+        return this.http.get<PatientModel>(`${this.patientUrl}/update?patientId=${patientId}&diagnosis=${finalDiagnosis}`);
     }
 }

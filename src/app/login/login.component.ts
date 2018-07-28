@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit  {
 
     title: string;
     display: string;
-    invalidLoginMessage: string;
+    loginMessage: string;
     patientExists: boolean;
     patientId: number;
     firstName: string;
@@ -20,10 +20,16 @@ export class LoginComponent implements OnInit  {
     gender: string;
     dateOfBirth: Date;
 
+    allPatients: PatientModel[];
+    searchManualId: boolean;
+
     constructor(private router: Router, private patientService: PatientService)   { }
 
     ngOnInit()  {
         this.title = 'Patient Treatment Prediction Login';
+        this.loginMessage = null;
+        this.searchManualId = false;
+        this.getAllPatients();
     }
 
     logIn(): void  {
@@ -32,27 +38,24 @@ export class LoginComponent implements OnInit  {
         this.patientService.getPatientById(this.patientId)
             .subscribe(
                 existingPatient => {
-                    if (existingPatient !== null)  {
-                        this.patientExists = false;
-                        this.invalidLoginMessage = null;
-                        this.patientService.setCurrentPatient(existingPatient);
-                        this.router.navigate(['/patient']);
-                    } else  {
-                        this.patientExists = true;
-                        this.invalidLoginMessage = `Patient ID: ${this.patientId} does not exist! Register a new patient.`;
-                    }
-                    return;
+                    this.patientService.setCurrentPatient(existingPatient);
+                    this.router.navigate(['/patient']);
                 },
                 error => {
                     console.log('ERROR');
-                    this.invalidLoginMessage = error;
-                }
-            );
+                    if (!this.patientId)  {
+                        this.loginMessage = 'Must input a Patient ID.';
+                    } else  {
+                        this.loginMessage = `Patient ID: ${this.patientId} does not exist! Register a new patient.`;
+                    }
+                });
     }
 
-    openModal(): void  {
-        this.display = 'block';
-    }
+    getAllPatients(): void  {
+        this.patientService.getAllPatients().subscribe(allPatients => {
+          this.allPatients = allPatients;
+        });
+      }
 
     setGender(gender: string)  {
         this.gender = gender;
@@ -67,13 +70,22 @@ export class LoginComponent implements OnInit  {
                 'lastName': this.lastName,
                 'gender': this.gender,
                 'dateOfBirth': this.dateOfBirth,
-                'patientCreationTimestamp': null
+                'patientCreationTimestamp': null,
+                'finalDiagnosis': null,
+                'finalDiagnosisTimestamp': null
             }
             ).subscribe(createdUser =>  {
-                this.patientExists = false;
-                this.invalidLoginMessage = null;
                 this.patientService.setCurrentPatient(createdUser);
                 this.router.navigate(['/patient']);
             });
+    }
+
+    onPatientSelect(countryId) {
+        this.patientId = null;
+        for (let i = 0; i < this.allPatients.length; i++)  {
+          if (this.allPatients[i].id === this.patientId) {
+            this.patientId = this.allPatients[i].id;
+          }
+        }
     }
 }

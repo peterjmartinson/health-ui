@@ -12,25 +12,32 @@ import { PatientHistoryService } from './services/patient.history.service';
 import { LoginComponent } from './login/login.component';
 import { HttpClient } from 'selenium-webdriver/http';
 import { HttpClientModule } from '@angular/common/http';
+import { ModelService } from './services/model.service';
+
+import { DataTableModule } from 'angular2-datatable';
+import { OnlyNumberDirective } from './directive/number.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    PatientComponent
+    PatientComponent,
+    OnlyNumberDirective
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
+    DataTableModule,
     [ModalModule.forRoot()]
   ],
   providers: [
     PatientService,
     PatientHistoryService,
+    ModelService,
     BsModalRef,
-    BsModalService,
+    BsModalService
   ],
   bootstrap: [AppComponent]
 })

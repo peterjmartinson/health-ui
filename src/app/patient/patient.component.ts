@@ -2,7 +2,8 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { PatientService } from '../services/patient.service';
 import { PatientHistoryService } from '../services/patient.history.service';
-import { PatientModel, PatientHistoryModel, UWDataModel } from '../models/app.types';
+import { PatientModel, PatientHistoryModel, UWDataModel, DataAnalysisModel } from '../models/app.types';
+import { ModelService } from '../services/model.service';
 
 @Component({
     selector: 'app-patient-form',
@@ -10,73 +11,97 @@ import { PatientModel, PatientHistoryModel, UWDataModel } from '../models/app.ty
 })
 export class PatientComponent implements OnInit  {
 
-  constructor(private router: Router, private patientService: PatientService, private patientHistoryService: PatientHistoryService) { }
+  constructor(private router: Router,
+              private patientService: PatientService,
+              private patientHistoryService: PatientHistoryService,
+              private modelService: ModelService) { }
 
+  errorMessage: string;
   patient: PatientModel;
   patientHistoryList: PatientHistoryModel[];
   data: UWDataModel;
   comments: string;
+  chosenModel: DataAnalysisModel;
+  models: DataAnalysisModel[];
+
+  tempFinalDiagnosis: string;
 
   ngOnInit()  {
+    this.errorMessage = null;
     this.patient = this.patientService.getCurrentPatient();
-    this.viewPatientHistory();
+    this.getModels();
+    if (this.isPatientLoggedIn())  {
+      this.viewPatientHistory();
+    }
     this.resetCurrentHistory();
+  }
+
+  isPatientLoggedIn(): boolean  {
+    if (this.patient === undefined)  {
+      return false;
+    } else  {
+      return true;
+    }
   }
 
   resetCurrentHistory(): void  {
     this.data = {
-      'id': 0.0,
-      'radiusMean': 0.0,
-      'textureMean': 0.0,
-      'perimeterMean': 0.0,
-      'areaMean': 0.0,
-      'smoothnessMean': 0.0,
-      'compactnessMean': 0.0,
-      'concavityMean': 0.0,
-      'concavePointsMean': 0.0,
-      'symmetryMean': 0.0,
-      'fractalDimensionMean': 0.0,
-      'radiusSe': 0.0,
-      'textureSe': 0.0,
-      'perimeterSe': 0.0,
-      'areaSe': 0.0,
-      'smoothnessSe': 0.0,
-      'compactnessSe': 0.0,
-      'concavitySe': 0.0,
-      'concavePointsSe': 0.0,
-      'symmetrySe': 0.0,
-      'fractalDimensionSe': 0.0,
-      'radiusWorst': 0.0,
-      'textureWorst': 0.0,
-      'perimeterWorst': 0.0,
-      'areaWorst': 0.0,
-      'smoothnessWorst': 0.0,
-      'compactnessWorst': 0.0,
-      'concavityWorst': 0.0,
-      'concavePointsWorst': 0.0,
-      'symmetryWorst': 0.0,
-      'fractalDimensionWorst': 0.0
+      'id': null,
+      'radiusMean': null,
+      'textureMean': null,
+      'perimeterMean': null,
+      'areaMean': null,
+      'smoothnessMean': null,
+      'compactnessMean': null,
+      'concavityMean': null,
+      'concavePointsMean': null,
+      'symmetryMean': null,
+      'fractalDimensionMean': null,
+      'radiusSe': null,
+      'textureSe': null,
+      'perimeterSe': null,
+      'areaSe': null,
+      'smoothnessSe': null,
+      'compactnessSe': null,
+      'concavitySe': null,
+      'concavePointsSe': null,
+      'symmetrySe': null,
+      'fractalDimensionSe': null,
+      'radiusWorst': null,
+      'textureWorst': null,
+      'perimeterWorst': null,
+      'areaWorst': null,
+      'smoothnessWorst': null,
+      'compactnessWorst': null,
+      'concavityWorst': null,
+      'concavePointsWorst': null,
+      'symmetryWorst': null,
+      'fractalDimensionWorst': null
     };
+    this.chosenModel = null;
+    this.comments = null;
   }
 
   viewPatientHistory(): void  {
     this.patientHistoryService.getPatientHistoryById(this.patient.id)
-      .subscribe(patientHistoryList => {
-        this.patientHistoryList = patientHistoryList;
-      },
-      error => {
-        console.log(error);
+    .subscribe(patientHistoryList => {
+      this.patientHistoryList = patientHistoryList;
+    },
+    error => {
+      console.log(error);
     });
   }
 
   newSession(): void  {
+    console.log(this.chosenModel.modelName);
     this.patientHistoryService.createNewSession(
       this.patient.id,
       {
         'id': this.patient.id,
         'patient': this.patient,
         'data': this.data,
-        'measurementTimestamp': null,
+        'model': this.chosenModel,
+        'dateOfMeasurement': null,
         'predictedDiagnosis': null,
         'comments': this.comments
       }).subscribe(newPatientHistory => {
@@ -84,8 +109,26 @@ export class PatientComponent implements OnInit  {
       },
       error => {
         console.log(error);
+        this.errorMessage = error;
     });
     this.resetCurrentHistory();
+  }
+
+  submitFinalDiagnosis(): void  {
+    this.patientService.updatePatientByIdFinalDiagnosis(this.patient.id, this.tempFinalDiagnosis)
+      .subscribe(patient => {
+        this.patient.finalDiagnosis = patient.finalDiagnosis;
+      });
+  }
+
+  setTempFinalDiagnosis(diagnosis: string)  {
+    this.tempFinalDiagnosis = diagnosis;
+  }
+
+  getModels(): void  {
+    this.modelService.getAllModels().subscribe(models => {
+      this.models = models;
+    });
   }
 
   logOut(): void  {

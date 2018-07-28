@@ -1,10 +1,11 @@
-export interface PatientModel  {
+export interface DataAnalysisModel  {
     id: number;
-    firstName: string;
-    lastName: string;
-    gender: string;
-    dateOfBirth: Date;
-    patientCreationTimestamp: string;
+    model: string;
+    modelName: string;
+    modelEntryTimestamp: string;
+    cvAccuracy: number;
+    dataSource: string;
+    numberOfRecords: number;
 }
 
 export interface UWDataModel  {
@@ -41,11 +42,23 @@ export interface UWDataModel  {
     fractalDimensionWorst: number;
 }
 
+export interface PatientModel  {
+    id: number;
+    firstName: string;
+    lastName: string;
+    gender: string;
+    dateOfBirth: Date;
+    patientCreationTimestamp: string;
+    finalDiagnosis: string;
+    finalDiagnosisTimestamp: string;
+}
+
 export interface PatientHistoryModel  {
     id: number;
     patient: PatientModel;
     data: UWDataModel;
-    measurementTimestamp: string;
+    model: DataAnalysisModel;
+    dateOfMeasurement: string;
     predictedDiagnosis: string;
     comments: string;
 }
